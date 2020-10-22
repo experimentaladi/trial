@@ -1,0 +1,279 @@
+import pyttsx3 #pip install pyttsx3
+import speech_recognition as sr #pip install speechRecognition
+import datetime
+import wikipedia #pip install wikipedia
+import webbrowser
+import os
+import smtplib
+from os import sys
+import subprocess
+import time
+import  playsound
+import winsound
+import pyautogui
+import time
+import random
+
+
+
+
+
+engine = pyttsx3.init('sapi5')
+voices = engine.getProperty('voices')
+# print(voices[1].id)
+engine.setProperty('voice', voices[0].id)
+
+
+def speak(audio):
+    engine.say(audio)
+    engine.runAndWait()
+
+
+def wishMe():
+    hour = int(datetime.datetime.now().hour)
+    if hour>=0 and hour<12:
+        speak("Good Morning BOSS!")
+        speak("initializing proto ")
+    elif hour>=12 and hour<18:
+        speak("Good Afternoon BOSS!")
+        speak("initializingproto ")
+    else:
+        speak("Good Evening BOSS!")
+        speak("initializing proto ")
+def screenshot():
+    myimage = pyautogui.screenshot()
+    myimage.save(r"C:\Users\Meera\Desktop\screenshots\image.png")
+
+def takeCommand():
+    #It takes microphone input from the user and returns string output
+
+    r = sr.Recognizer()
+    with sr.Microphone() as source:
+
+        print("Listening...")
+        speak("listening...")
+
+        r.pause_threshold = 1
+        audio = r.listen(source)
+
+
+    try:
+        print("Recognizing...")
+        speak("recognizing")
+        query = r.recognize_google(audio, language='en-in')
+        print(f"boss said: {query}\n")
+
+    except Exception as e:
+        # print(e)
+        print("Say that again please...")
+        speak("say that again please...")
+        return "None"
+    return query
+def alarm():
+   speak("sir please enter the hour")
+   hor =int(takeCommand())
+   speak("sir please enter the min")
+   minn = int(takeCommand())
+   speak("sir please enter the sec")
+   sec = int(takeCommand())
+   speak("which class do you  have boss")
+   cla = takeCommand()
+   print("alarm set for" + str(hor) + str(minn) + str(sec))
+   while True:
+       if time.localtime().tm_hour == hor and time.localtime().tm_min == minn and time.localtime().tm_sec == sec:
+           speak("boss you have your"+cla+"class now please boss join your class")
+
+           break
+def search():
+    ser=takeCommand()
+    speak("searching google")
+    webbrowser.open('https://www.google.com?#q='+ser)
+
+def sendEmail(to, content):
+    server = smtplib.SMTP('smtp.gmail.com', 587)
+    server.ehlo()
+    server.starttls()
+    server.login('bhowmickaditya06@gmail.com', 'aa1714@2512')
+    server.sendmail('bhowmickaditya06@gmail.com', to, content)
+    server.close()
+if __name__ == "__main__":
+    wishMe()
+    print("initialized proto")
+    speak("initialized proto")
+    while True:
+    # if 1:
+        query = takeCommand().lower()
+
+
+
+        if 'wikipedia' in query:
+            speak('Searching Wikipedia...')
+            query = query.replace("wikipedia", "")
+            results = wikipedia.summary(query, sentences=2)
+            speak("According to Wikipedia")
+            print(results)
+            speak(results)
+
+        elif 'proto' in query:
+            query = query.replace("proto", "")
+            speak('Searching google...')
+            webbrowser.open('https://www.google.com/?#q='+ query)
+
+        elif 'take screenshot' in query:
+            speak("preparing screenshot")
+            screenshot()
+            speak("screenshot taken boss and saved to screenshots folder")
+
+
+
+
+            
+        elif 'open youtube' in query:
+            speak("opening youtube")
+            webbrowser.open("https://www.youtube.com")
+
+
+        elif 'open gmail' in query:
+            speak("opening g-mail")
+            webbrowser.open("https://mail.google.com/mail/u/3/#inbox")
+
+        elif 'open google meet' in query:
+            speak("opening google meet")
+            webbrowser.open("https://meet.google.com/noj-chnb-ukb?authuser=1")
+        elif 'open whatsapp' in query:
+            speak("opening whatsapp")
+            webbrowser.open("https://web.whatsapp.com")
+        elif 'how are you' in query:
+           speak("i am absolutely fine boss please tell me how can i help you")
+        elif 'who are you' in query:
+           speak("i am jarvis an AI assistant made by  aditya bhowmick")
+        elif 'thank you jarvis' in query:
+           speak("your most welcome boss i am here only because of you")
+
+
+
+
+
+        elif 'open aditya google classroom' in query:
+            speak("opening google classroom")
+            webbrowser.open("https://classroom.google.com/u/2/h")
+
+        elif 'open meera google classroom' in query:
+            speak("opening google classroom")
+            webbrowser.open("https://classroom.google.com/u/1/h")
+
+        elif 'he is not eating' in query:
+            speak("scaring him")
+            webbrowser.open("https://www.youtube.com/watch?v=uNA92B4alzs")
+
+
+        elif 'open my channel' in query:
+            speak("opening experimental adi")
+            webbrowser.open("https://www.youtube.com/channel/UCNknNKDmuUwzBJSaCmSw44A")
+
+        elif 'open google' in query:
+            speak("opening google ")
+            webbrowser.open("https://www.google.com")
+        elif 'open my website' in query:
+            speak("opening roborun")
+            webbrowser.open("https://sites.google.com/view/roborun")
+
+        elif 'play english music' in query:
+            speak("playing english music")
+            webbrowser.open("https://www.youtube.com/watch?v=-ObdvMkCKws&t=933s")
+
+        elif 'play hindi music' in query:
+            speak("playing hindi music")
+            webbrowser.open("https://www.youtube.com/watch?v=J1DIA4kW(s9w")
+        elif 'open google sheets' in query:
+            speak("opening google sheets")
+            webbrowser.open("https://docs.google.com/spreadsheets/u/1/?tgif=d")
+        elif 'play avengers music' in query:
+            speak("playing avengers music")
+            playsound.playsound('avengers.mp3',True)
+
+        elif 'play music' in query:
+            speak("playing music")
+            randomno = random.randint(1,9)
+            music_dir = 'C:\\Users\\Meera\\Music'
+            songs =os.listdir(music_dir)
+            print(songs)
+            os.startfile(os.path.join(music_dir, songs[randomno]))
+
+
+
+        elif 'exit' in query:
+            speak("ok boss proto is going to sleep")
+            sys.exit(0)
+        elif 'stop listening' in query:
+            speak("for how many seconds do you want me to stop listening your commands")
+            ans =int(takeCommand())
+
+            print(ans)
+            time.sleep(ans)
+            speak("proto is back to work boss ")
+
+
+
+
+        elif 'the time' in query:
+            strTime = datetime.datetime.now().strftime("%H:%M:%S")
+            speak(f"Sir, the time is {strTime}")
+
+
+
+        elif 'send email to aditya' in query:
+            try:
+                speak("What should I say?")
+                content = takeCommand()
+                to = "bhowmickaditya06@gmail.com"
+                sendEmail(to, content)
+                speak("Email has been sent!")
+            except Exception as e:
+                print(e)
+                speak("sorry email was not sent")
+
+
+
+
+        elif 'search in youtube' in query:
+            try:
+                speak("What should I search?")
+                search = takeCommand()
+                speak("searching in youtube")
+
+
+                webbrowser.open("https://www.youtube.com/results?search_query="+ search)
+            except Exception as e:
+                print(e)
+                speak("sorry search was incomplete")
+        elif 'search google' in query:
+            try:
+                speak(" yes boss What should I search?")
+                google = takeCommand()
+                speak("searching google")
+                webbrowser.open("https://www.google.com/?#q="+ google)
+            except Exception as e:
+                print(e)
+                speak("sorry search was incomplete")
+
+        elif 'open chrome' in query:
+            chrome= subprocess.Popen('C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe')
+            speak("chrome has been opened")
+        elif 'close chrome' in query:
+            os.system("taskkill/f /im chrome.exe")
+            speak("chrome has been closed")
+        elif 'close python' in query:
+            os.system("taskkill/f /im pycharm64.exe")
+            speak("pycharm has been closed")
+        elif 'set reminder' in query:
+            alarm()
+        elif 'stop music' in query:
+            os.system("taskkill/f /im vlc.exe")
+            speak("music has been stopped")
+        elif 'open screenshot' in query:
+            os.startfile("C:\\Users\\Meera\Desktop\\screenshots")
+        elif 'open my python project' in query:
+            os.startfile("F:\\my coding projects")
+        elif 'open f drive' in query:
+            os.startfile("F:\\")
